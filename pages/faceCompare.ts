@@ -25,10 +25,7 @@ export class FaceCompare {
             let matchingNumber = Number(actualTexts[i].replace(/\D/g, ""))
             if(matchingNumber>90)
                 matchesCount ++;
-            console.log(`matches this time '${matchesCount}'`);
         }
         console.log(`Number of faces matching: '${matchesCount}'`);
     }
-
-
 }
