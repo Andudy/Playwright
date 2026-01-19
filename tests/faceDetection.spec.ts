@@ -36,12 +36,12 @@ test('Face Detection check', async ({mainPageRegular,faceDetection}) => {
   await expect(mainPageRegular.page.getByText('No face detected')).toBeVisible();
   await faceDetection.checkFaceDetectionResult();
   await mainPageRegular.page.waitForSelector('.UploadFile_icon__7ZTzy');
-  //Loading photo with 1 face
+  //Loading photo many faces
   await mainPageRegular.page.setInputFiles("input[type='file']", picWithManyFacesToCompare);
   await expect(mainPageRegular.page.locator('.Detection_image-wrapper__kwoI_').first()).toBeVisible();
   await faceDetection.checkFaceDetectionResult();
   await mainPageRegular.page.waitForSelector('.UploadFile_icon__7ZTzy');
-  //Loading photo many faces
+  //Loading photo with 1 face
   await mainPageRegular.page.setInputFiles("input[type='file']", photoWithOneFace);
   await expect(mainPageRegular.page.locator('.Detection_image-wrapper__kwoI_').first()).toBeVisible();
   await faceDetection.checkFaceDetectionResult();
