@@ -13,12 +13,12 @@ test('Face Compare check', async ({mainPageRegular,faceCompare}) => {
   await mainPageRegular.page.reload();
   await mainPageRegular.switchToTab('Face matching');
   //Loading 1 file into Reference section and 2nd file to Compare section and checking Comparing results: if Similarity>90% than faces match
-  await mainPageRegular.page.waitForSelector("//div[text()[normalize-space()='Reference']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]");
-  await mainPageRegular.page.locator("//div[text()[normalize-space()='Reference']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]//input").setInputFiles(picWithManyFacesToCompare);
+  await expect(faceCompare.referenceUploadButtton).toBeVisible();
+  await faceCompare.referenceUploadButttonInput.setInputFiles(picWithManyFacesToCompare);
   await mainPageRegular.waitForLoadingState();
-  await mainPageRegular.page.waitForSelector("//div[text()[normalize-space()='Compare']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]");
-  await mainPageRegular.page.locator("//div[text()[normalize-space()='Compare']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]//input").setInputFiles(picWithManyFacesToCompare2);
-  await expect(mainPageRegular.page.locator("//div[contains(@class, 'Results_item__T4Lrp')]").first()).toBeVisible();
+  await expect(faceCompare.compareUploadButton).toBeVisible();
+  await faceCompare.compareUploadButtonInput.setInputFiles(picWithManyFacesToCompare2);
+  await expect(faceCompare.listItems.first()).toBeVisible();
   await faceCompare.checkFaceCompare();
 });
 
@@ -27,7 +27,7 @@ test('Face Detection check', async ({mainPageRegular,faceDetection}) => {
   await mainPageRegular.switchToTab('Face detection');
   await mainPageRegular.page.reload();
   await mainPageRegular.switchToTab('Face detection');
-  await mainPageRegular.page.waitForSelector('.UploadFile_icon__7ZTzy');
+  await expect(faceDetection.uploadButtonLocator).toBeVisible();
   //Loading photo without face
   await mainPageRegular.page.setInputFiles("input[type='file']", photoWithoutFace);
   //Confirming uploading files for the 1st time
@@ -35,14 +35,14 @@ test('Face Detection check', async ({mainPageRegular,faceDetection}) => {
   await mainPageRegular.waitForLoadingState();
   await expect(mainPageRegular.page.getByText('No face detected')).toBeVisible();
   await faceDetection.checkFaceDetectionResult();
-  await mainPageRegular.page.waitForSelector('.UploadFile_icon__7ZTzy');
+  await expect(faceDetection.uploadButtonLocator).toBeVisible();
   //Loading photo many faces
   await mainPageRegular.page.setInputFiles("input[type='file']", picWithManyFacesToCompare);
-  await expect(mainPageRegular.page.locator('.Detection_image-wrapper__kwoI_').first()).toBeVisible();
+  await expect(faceDetection.faceElementLocator.first()).toBeVisible();
   await faceDetection.checkFaceDetectionResult();
-  await mainPageRegular.page.waitForSelector('.UploadFile_icon__7ZTzy');
+  await expect(faceDetection.uploadButtonLocator).toBeVisible();
   //Loading photo with 1 face
   await mainPageRegular.page.setInputFiles("input[type='file']", photoWithOneFace);
-  await expect(mainPageRegular.page.locator('.Detection_image-wrapper__kwoI_').first()).toBeVisible();
+  await expect(faceDetection.faceElementLocator.first()).toBeVisible();
   await faceDetection.checkFaceDetectionResult();
 });

@@ -3,28 +3,33 @@ import {expect, Locator, Page } from '@playwright/test';
 export class FaceCompare {
 
     readonly page: Page;
-
+    readonly referenceUploadButtton: Locator;
+    readonly referenceUploadButttonInput: Locator;
+    readonly compareUploadButton: Locator;
+    readonly compareUploadButtonInput: Locator;
+    readonly listItems: Locator;
     constructor(page: Page) {
 
     this.page = page;
-
-    // const noFace = page.locator('No face detected');
+    this.referenceUploadButtton = page.locator("//div[text()[normalize-space()='Reference']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]");
+    this.referenceUploadButttonInput = page.locator("//div[text()[normalize-space()='Reference']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]//input");
+    this.compareUploadButton = page.locator("//div[text()[normalize-space()='Compare']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]");
+    this.compareUploadButtonInput = page.locator("//div[text()[normalize-space()='Compare']]//..//..//..//div[contains(@class,'UploadFile_wrapper__ivZ2q')]//input");
+    this.listItems = page.locator("//div[contains(@class, 'Results_item__T4Lrp')]//b");
 
     }
 
     async checkFaceCompare() {
-        const listItems = this.page.locator("//div[contains(@class, 'Results_item__T4Lrp')]//b");
-        // Get all text contents into an array
-        const actualTexts = await listItems.allInnerTexts();
+        await expect (this.listItems.first()).toBeVisible();
+        const actualTexts = await this.listItems.allInnerTexts();
         let matchesCount = 0;
-        await expect (this.page.locator("//div[contains(@class, 'Results_results__YRqqW')]")).toBeVisible();
-        await expect (this.page.locator("//div[contains(@class, 'Results_item__T4Lrp')]//b").first()).toBeVisible();
         for(let i = 0; i<actualTexts.length;i++)
         {
-            await expect (this.page.locator("//div[contains(@class, 'Results_item__T4Lrp')]//b").nth(i)).toBeVisible({timeout:3000});
+            await expect (this.listItems.nth(i)).toBeVisible({timeout:5000});
             let matchingNumber = Number(actualTexts[i].replace(/\D/g, ""))
             if(matchingNumber>90)
                 matchesCount ++;
+            console.log(matchesCount);
         }
         console.log(`Number of faces matching: '${matchesCount}'`);
     }
